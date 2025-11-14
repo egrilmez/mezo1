@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # Ollama for in-house LLM
+  ollama:
+    image: ollama/ollama:latest
+    container_name: mezopotamya-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+    command: serve
+    
+  # Pull and run model
+  ollama-setup:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    volumes:
+      - ollama:/root/.ollama
+    entrypoint: >
+      sh -c "
+        sleep 10 &&
+        ollama pull llama2:7b-chat &&
+        ollama pull mistral:7b-instruct
+      "
+
+  # Python FastAPI Backend
+  backend:
+    build:
+      context: ./mezopotamya-backend
+      dockerfile: Dockerfile
+    container_name: mezopotamya-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - DATABASE_PATH=/app/data/mezopotamya.db
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - ollama
+      - ollama-setup
+    restart: unless-stopped
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./mezopotamya-frontend
+      dockerfile: Dockerfile
+    container_name: mezopotamya-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  ollama:
+  data:
