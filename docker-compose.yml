@@ -32,6 +32,20 @@ services:
         ollama pull mistral:7b-instruct
       "
 
+  # Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: mezopotamya-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    restart: unless-stopped
+
   # Python FastAPI Backend
   backend:
     build:
@@ -43,11 +57,17 @@ services:
     environment:
       - OLLAMA_HOST=http://ollama:11434
       - DATABASE_PATH=/app/data/mezopotamya.db
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - EMBEDDING_MODEL=sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+      - CHUNK_SIZE=512
+      - CHUNK_OVERLAP=50
     volumes:
       - ./data:/app/data
     depends_on:
       - ollama
       - ollama-setup
+      - qdrant
     restart: unless-stopped
 
   # Next.js Frontend
@@ -67,3 +87,4 @@ services:
 volumes:
   ollama:
   data:
+  qdrant_storage:
