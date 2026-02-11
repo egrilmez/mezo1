@@ -31,3 +31,10 @@ pydantic>=2.5.0
 
 # Type checking (development)
 typing-extensions>=4.9.0
+
+# WhatsApp Integration
+twilio>=8.10.0
+flask>=3.0.0
+gunicorn>=21.2.0
+redis>=5.0.0
+phonenumbers>=8.13.0
