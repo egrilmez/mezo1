@@ -1,0 +1,40 @@
+# Core LiveKit dependencies
+livekit>=0.15.0
+livekit-agents>=0.9.0
+livekit-plugins-deepgram>=0.6.0
+livekit-plugins-cartesia>=0.2.0
+livekit-plugins-silero>=0.6.0
+
+# LangChain and LangGraph for orchestration
+langchain>=0.1.0
+langchain-core>=0.1.0
+langchain-groq>=0.1.0
+langgraph>=0.0.40
+
+# HTTP client for PMS integration
+httpx>=0.26.0
+requests>=2.31.0
+
+# Date/time handling
+python-dateutil>=2.8.2
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Async support
+asyncio>=3.4.3
+aiohttp>=3.9.0
+
+# Logging and utilities
+structlog>=23.2.0
+pydantic>=2.5.0
+
+# Type checking (development)
+typing-extensions>=4.9.0
+
+# WhatsApp Integration
+twilio>=8.10.0
+flask>=3.0.0
+gunicorn>=21.2.0
+redis>=5.0.0
+phonenumbers>=8.13.0
