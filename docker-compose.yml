@@ -84,7 +84,117 @@ services:
       - backend
     restart: unless-stopped
 
+  # ============================================================================
+  # Hotel Reservation Agent Services
+  # ============================================================================
+
+  # Redis - Session storage for WhatsApp bot
+  hotel-redis:
+    image: redis:7-alpine
+    container_name: hotel-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - hotel-redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # WhatsApp Bot - Text-based reservations
+  hotel-whatsapp-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hotel-whatsapp-bot
+    ports:
+      - "5000:5000"
+    environment:
+      # Groq LLM
+      - GROQ_API_KEY=${GROQ_API_KEY}
+
+      # Twilio WhatsApp
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_WHATSAPP_NUMBER=${TWILIO_WHATSAPP_NUMBER}
+      - WHATSAPP_BOT_PORT=5000
+      - FLASK_DEBUG=false
+
+      # Redis
+      - REDIS_HOST=hotel-redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - SESSION_TTL_SECONDS=3600
+
+      # Hotel Configuration
+      - HOTEL_NAME=${HOTEL_NAME:-The Grand Hotel}
+      - HOTEL_TIMEZONE=${HOTEL_TIMEZONE:-America/New_York}
+
+      # PMS Configuration
+      - QLOAPPS_BASE_URL=${QLOAPPS_BASE_URL:-http://localhost/api}
+      - QLOAPPS_API_KEY=${QLOAPPS_API_KEY:-mock_key}
+      - PMS_MOCK_MODE=${PMS_MOCK_MODE:-true}
+
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      hotel-redis:
+        condition: service_healthy
+    command: ["gunicorn", "-c", "gunicorn.conf.py", "whatsapp_bot:app"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Voice Agent - LiveKit-based voice reservations
+  hotel-voice-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hotel-voice-agent
+    environment:
+      # LiveKit
+      - LIVEKIT_URL=${LIVEKIT_URL}
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
+
+      # Speech Services
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY}
+      - CARTESIA_API_KEY=${CARTESIA_API_KEY}
+
+      # LLM
+      - GROQ_API_KEY=${GROQ_API_KEY}
+
+      # Hotel Configuration
+      - HOTEL_NAME=${HOTEL_NAME:-The Grand Hotel}
+      - HOTEL_TIMEZONE=${HOTEL_TIMEZONE:-America/New_York}
+
+      # PMS Configuration
+      - QLOAPPS_BASE_URL=${QLOAPPS_BASE_URL:-http://localhost/api}
+      - QLOAPPS_API_KEY=${QLOAPPS_API_KEY:-mock_key}
+      - PMS_MOCK_MODE=${PMS_MOCK_MODE:-true}
+
+      # Agent Configuration
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - ENABLE_INTERRUPTIONS=${ENABLE_INTERRUPTIONS:-true}
+      - VAD_THRESHOLD=${VAD_THRESHOLD:-0.5}
+    volumes:
+      - ./logs:/app/logs
+    command: ["python", "agent.py"]
+    restart: unless-stopped
+    profiles:
+      - voice
+
 volumes:
   ollama:
   data:
   qdrant_storage:
+  hotel-redis-data:
