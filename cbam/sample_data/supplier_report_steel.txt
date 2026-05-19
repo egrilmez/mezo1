@@ -1,0 +1,13 @@
+SUPPLIER EMISSIONS REPORT
+Issued: 2025-03-14
+Installation: Bosporus Steel Works, Karabük, Türkiye
+UNLOCODE: TRKBK   Lat 41.2050 Lon 32.6275
+CN code: 7208.10.00 (hot-rolled flat steel in coils, with patterns in relief)
+Production route: Integrated BF-BOF (blast furnace / basic oxygen furnace)
+Reporting period: 2025-01-01 to 2025-03-31
+Quantity delivered to EU importer: 1,250.00 tonnes
+Direct embedded emissions: 2,438 tCO2e (1.95 tCO2e/t, monitored per Implementing Reg. 2023/1773)
+Indirect embedded emissions: 225 tCO2e (0.18 tCO2e/t)
+Methodology: actual emissions from continuous monitoring
+Carbon price paid in country of origin: none (no ETS in force for this installation)
+Destination country: Netherlands (NL)

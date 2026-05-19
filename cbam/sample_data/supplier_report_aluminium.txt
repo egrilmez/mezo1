@@ -1,0 +1,16 @@
+EMISSIONS DATA SHEET — UNWROUGHT ALUMINIUM
+Producer: Atlas Aluminium Smelter Co., Dubai, United Arab Emirates
+Address: Plot J-42, Jebel Ali Industrial 2, Dubai, UAE
+UNLOCODE: AEJEA
+Geo: 24.9857 N, 55.0532 E
+
+Product: Unwrought aluminium, not alloyed (CN 76011000)
+Quantity exported to EU customer: 420 tonnes
+Reporting quarter: Q1 2025
+
+Embedded emissions (per tonne of product, actual values from facility monitoring):
+- Direct (Scope 1): 1.55 tCO2e/t
+- Indirect (Scope 2, electricity): 12.40 tCO2e/t  (grid mix, partly natural gas)
+
+Carbon price paid in UAE: nil. No mandatory carbon pricing instrument applies.
+Production route: Hall-Héroult primary electrolysis with prebake anodes.
