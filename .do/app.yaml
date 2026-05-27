@@ -1,0 +1,43 @@
+# DigitalOcean App Platform spec for the CBAM Reporting Tool.
+# Reviewed-by-DO-console deployment: connect this repo to DO Apps and point
+# it at this file, or run `doctl apps create --spec .do/app.yaml`.
+#
+# Prereq: the cbam/ folder (PR #3) must be merged to the deploy branch first,
+# otherwise the build has nothing to install.
+
+name: cbam-reporting-tool
+region: nyc
+
+services:
+  - name: web
+    source_dir: /cbam
+    github:
+      repo: egrilmez/mezo1
+      branch: master
+      deploy_on_push: true
+
+    environment_slug: python
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    instance_count: 1
+
+    http_port: 8080
+    run_command: uvicorn backend.main:app --host 0.0.0.0 --port 8080
+
+    envs:
+      - key: OPENAI_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: OPENAI_MODEL
+        scope: RUN_TIME
+        value: gpt-4o-mini
+      - key: PYTHONUNBUFFERED
+        scope: RUN_TIME
+        value: "1"
+
+    health_check:
+      http_path: /api/health
+      initial_delay_seconds: 10
+      period_seconds: 30
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 5
