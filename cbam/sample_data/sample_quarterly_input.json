@@ -1,0 +1,51 @@
+{
+  "report": {
+    "reporting_year": 2025,
+    "reporting_quarter": 1,
+    "declarant_name": "Acme Imports B.V.",
+    "declarant_eori": "NL123456789012345",
+    "declarant_country": "NL"
+  },
+  "goods": [
+    {
+      "cn_code": "72081000",
+      "description": "Hot-rolled flat steel in coils, with patterns in relief",
+      "sector": "iron_and_steel",
+      "country_of_origin": "TR",
+      "quantity": 1250.0,
+      "quantity_unit": "tonne",
+      "production_method": "BF-BOF",
+      "installation": {
+        "name": "Bosporus Steel Works",
+        "country": "TR",
+        "address": "Karabuk, Turkiye",
+        "unlocode": "TRKBK",
+        "latitude": 41.205,
+        "longitude": 32.6275
+      },
+      "direct_emissions_per_unit": 1.95,
+      "indirect_emissions_per_unit": 0.18,
+      "emissions_source": "actual"
+    },
+    {
+      "cn_code": "76011000",
+      "description": "Unwrought aluminium, not alloyed",
+      "sector": "aluminium",
+      "country_of_origin": "AE",
+      "quantity": 420.0,
+      "quantity_unit": "tonne",
+      "production_method": "Hall-Heroult primary electrolysis",
+      "installation": {
+        "name": "Atlas Aluminium Smelter Co.",
+        "country": "AE",
+        "address": "Plot J-42, Jebel Ali Industrial 2, Dubai",
+        "unlocode": "AEJEA",
+        "latitude": 24.9857,
+        "longitude": 55.0532
+      },
+      "direct_emissions_per_unit": 1.55,
+      "indirect_emissions_per_unit": 12.4,
+      "emissions_source": "actual"
+    }
+  ]
+}

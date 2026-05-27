@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CBAM Reporting Tool</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>CBAM Reporting Tool</h1>
+    <p class="subtitle">EU Carbon Border Adjustment Mechanism — quarterly report assistant</p>
+    <div id="health" class="health"></div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="qa">Regulation Q&amp;A</button>
+    <button class="tab" data-tab="extract">Extract from supplier doc</button>
+    <button class="tab" data-tab="goods">Goods registry</button>
+    <button class="tab" data-tab="report">Generate report</button>
+  </nav>
+
+  <main>
+    <section id="tab-qa" class="panel active">
+      <h2>Ask about CBAM</h2>
+      <p class="hint">Quarterly deadlines, scope, default values, carbon-price deductions — ask anything.</p>
+      <div id="qa-history" class="chat"></div>
+      <form id="qa-form">
+        <textarea id="qa-input" rows="3" placeholder="e.g. When is the Q1 2025 report due?"></textarea>
+        <button type="submit">Ask</button>
+      </form>
+    </section>
+
+    <section id="tab-extract" class="panel">
+      <h2>Extract emissions data from a supplier document</h2>
+      <p class="hint">Paste the text of a supplier emissions report; the AI returns structured CBAM fields.</p>
+      <label>Optional CN code hint:
+        <input type="text" id="extract-cn" placeholder="e.g. 72081000" />
+      </label>
+      <textarea id="extract-input" rows="10" placeholder="Paste supplier document text here..."></textarea>
+      <div class="row">
+        <button id="extract-run">Extract</button>
+        <button id="extract-sample" type="button" class="ghost">Load sample (steel)</button>
+        <button id="extract-add" type="button" disabled>Add to registry</button>
+      </div>
+      <pre id="extract-output" class="output"></pre>
+    </section>
+
+    <section id="tab-goods" class="panel">
+      <h2>Goods registry</h2>
+      <p class="hint">Imported goods that will be included in the quarterly report.</p>
+      <button id="goods-refresh">Refresh</button>
+      <table id="goods-table">
+        <thead>
+          <tr>
+            <th>CN code</th><th>Sector</th><th>Origin</th>
+            <th>Quantity</th><th>Direct (t/u)</th><th>Indirect (t/u)</th>
+            <th>Source</th><th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="tab-report" class="panel">
+      <h2>Generate quarterly report XML</h2>
+      <form id="report-form" class="grid">
+        <label>Reporting year
+          <input type="number" id="r-year" value="2025" min="2023" max="2099" />
+        </label>
+        <label>Quarter
+          <select id="r-quarter">
+            <option>1</option><option>2</option><option>3</option><option>4</option>
+          </select>
+        </label>
+        <label>Declarant name
+          <input type="text" id="r-name" value="Acme Imports B.V." />
+        </label>
+        <label>Declarant EORI
+          <input type="text" id="r-eori" value="NL123456789012345" />
+        </label>
+        <label>Declarant country (ISO alpha-2)
+          <input type="text" id="r-country" value="NL" maxlength="2" />
+        </label>
+        <button type="submit">Generate &amp; download XML</button>
+      </form>
+      <pre id="report-output" class="output"></pre>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
